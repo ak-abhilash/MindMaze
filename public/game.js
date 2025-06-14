@@ -4539,7 +4539,6 @@ function checkIncomingModuleAPI() {
 var _main = makeInvalidEarlyAccess('_main');
 var _move = Module['_move'] = makeInvalidEarlyAccess('_move');
 var _getMazeState = Module['_getMazeState'] = makeInvalidEarlyAccess('_getMazeState');
-var _getTrustState = Module['_getTrustState'] = makeInvalidEarlyAccess('_getTrustState');
 var _fflush = makeInvalidEarlyAccess('_fflush');
 var _strerror = makeInvalidEarlyAccess('_strerror');
 var _emscripten_stack_init = makeInvalidEarlyAccess('_emscripten_stack_init');
@@ -4554,7 +4553,6 @@ function assignWasmExports(wasmExports) {
   _main = createExportWrapper('main', 2);
   Module['_move'] = _move = createExportWrapper('move', 2);
   Module['_getMazeState'] = _getMazeState = createExportWrapper('getMazeState', 0);
-  Module['_getTrustState'] = _getTrustState = createExportWrapper('getTrustState', 0);
   _fflush = createExportWrapper('fflush', 1);
   _strerror = createExportWrapper('strerror', 1);
   _emscripten_stack_init = wasmExports['emscripten_stack_init'];
