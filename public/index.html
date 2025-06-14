@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>MindMaze</title>
+  <style>
+    body {
+      background-color: #000;
+      color: #0f0;
+      font-family: monospace;
+      text-align: center;
+      padding: 20px;
+    }
+    #maze {
+      white-space: pre;
+      font-size: 14px;
+    }
+    button {
+      padding: 10px;
+      margin: 5px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🧠 MindMaze</h1>
+  <pre id="maze">Loading maze...</pre>
+  <div>
+    <button onclick="move('W')">⬆️ Up</button><br/>
+    <button onclick="move('A')">⬅️ Left</button>
+    <button onclick="move('S')">⬇️ Down</button>
+    <button onclick="move('D')">➡️ Right</button>
+  </div>
+
+  <script src="game.js"></script>
+  <script>
+    const mazeDisplay = document.getElementById('maze');
+
+    function updateMaze() {
+      const mazeStr = Module.ccall('getMazeState', 'string', [], []);
+      mazeDisplay.innerText = mazeStr;
+    }
+
+    function move(dir) {
+      Module.ccall('move', null, ['string'], [dir]);
+      updateMaze();
+    }
+
+    Module.onRuntimeInitialized = () => {
+      updateMaze();
+    };
+  </script>
+</body>
+</html>
