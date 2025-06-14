@@ -1,41 +1,48 @@
-#include "maze.h"
+#include "../include/maze.h"
+#include "../include/trust.h"
+#include <string>
 
 Maze maze(5, 5);
+TrustSystem trust;
 int px = 0, py = 0;
+bool player1Turn = true;
 
 extern "C" {
-
-// Move the player by dx, dy
-void move(int dx, int dy) {
-    int newX = px + dx;
-    int newY = py + dy;
-
-    if (newX < 0 || newY < 0 || newX >= 5 || newY >= 5) return;
-    if (maze.isWall(newX, newY)) return;
-
-    px = newX;
-    py = newY;
-}
-
-// Return the maze grid as a string
-const char* getMazeState() {
-    static std::string output;
-    output.clear();
-
-    for (int y = 0; y < 5; ++y) {
-        for (int x = 0; x < 5; ++x) {
-            if (x == px && y == py)
-                output += "P ";
-            else if (maze.isWall(x, y))
-                output += "# ";
-            else if (maze.isExit(x, y))
-                output += "E ";
-            else
-                output += ". ";
+    void move(int dx, int dy) {
+        int newX = px + dx;
+        int newY = py + dy;
+        if (newX >= 0 && newY >= 0 && newX < 5 && newY < 5 && !maze.isWall(newX, newY)) {
+            px = newX;
+            py = newY;
         }
-        output += "\n";
     }
 
-    return output.c_str();
-}
+    const char* getMazeState() {
+        static std::string view;
+        view = maze.renderJSON(px, py);
+        return view.c_str();
+    }
+
+    const char* getGameStateJSON() {
+        static std::string state;
+        state = trust.getStateJSON();
+        return state.c_str();
+    }
+
+    void sendMessage(const char* msg, bool isLie) {
+        std::string sender = player1Turn ? "Player 1" : "Player 2";
+        trust.sendMessage(sender, msg, isLie);
+    }
+
+    void accuse() {
+        std::string accuser = player1Turn ? "Player 1" : "Player 2";
+        trust.accuse(accuser);
+    }
+
+    void resetGame() {
+        px = 0;
+        py = 0;
+        player1Turn = true;
+        trust.reset();
+    }
 }

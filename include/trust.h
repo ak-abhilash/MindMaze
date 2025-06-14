@@ -9,13 +9,14 @@ private:
     int trustP2;
     std::string lastSender;
     bool lastLie;
-
+    std::string lastMessage;
 public:
     TrustSystem();
     void sendMessage(const std::string& sender, const std::string& message, bool isLie);
     void accuse(const std::string& accuser);
     int getTrust(const std::string& player);
-    void modifyTrust(const std::string& player, int amount);
+    void reset();
+    std::string getStateJSON();
 };
 
 #endif
